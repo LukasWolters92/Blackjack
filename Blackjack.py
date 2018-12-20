@@ -78,6 +78,7 @@ class Spieler:
         self.Spielername = Name
         self.Hand = []
         self.Handwert = 0
+        self.Einsatz = 0
 
 
     def leerehand(self):
