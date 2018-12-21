@@ -77,13 +77,18 @@ class Spieler:
         self.Spielerguthaben = Guthaben
         self.Spielername = Name
         self.Hand = []
+        self.SplitHand = []
         self.Handwert = 0
         self.Einsatz = 0
+        self.SplitEinsatz = 0
 
 
     def leerehand(self):
         self.Hand = []
+        self.SplitHand = []
         self.Handwert = 0
+        self.Einsatz = 0
+        self.SplitEinsatz = 0
 
     def handwert(self):
         a = 0
@@ -105,6 +110,15 @@ class Spieler:
     def printHand(self):
         for i in range(0,len(self.Hand)):
             print(self.Hand[i].returnkartenname())
+
+    def wetten(self, Wette):
+
+        if self.Spielerguthaben >= Wette:
+            self.Spielerguthaben -= Wette
+            self.Einsatz = Wette
+            return True
+        else:
+            return False
 
 
 
@@ -138,6 +152,7 @@ Teilnehmer = []
 Teilnehmer.append(dealer)
 
 while True:
+
     Name = input("Geben Sie Ihren Namen ein. Wenn sich alle Spieler eingetragen haben geben Sie x ein ")
     if Name != "x":
         Guthaben = input("Wie hoch ist Ihr Guthaben? ")
@@ -145,18 +160,72 @@ while True:
     else:
         break
 
+AlleSpieler = Teilnehmer
+
 while spieldeck.anzahlkarten() > 52:
-    #Einsatz setzen
+    Teilnehmer
+    for i in range(1, len(Teilnehmer)):
+        a = 0                                                                                                           # a ist eine Hilfsvariable
+        while True:
+
+            a = input(Teilnehmer[i].Spielername + ", Was ist Ihr Einsatz? Ihr Guthaben beträgt" + str(Teilnehmer[i].Spielerguthaben))
+            b = False
+            b = Teilnehmer[i].wetten(a)
+            if b:
+                break
+            else:
+                print("Sie haben nicht genug Guthaben.")
+
     print("Die ersten Karten werden gezogen")
+
     for i in range(0, len(Teilnehmer)):
         Teilnehmer[i].Hand.append(spieldeck.karteziehen())
+
+    print(Teilnehmer[0].Spielername + "s Hand:")
+    Teilnehmer[0].printHand()
+
+    for i in range(0, len(Teilnehmer)):
+        Teilnehmer[i].Hand.append(spieldeck.karteziehen())
+
+    print(Teilnehmer[0].Spielername + "s Hand:")
+    Teilnehmer[0].printHand()
 
     for i in range(1, len(Teilnehmer)):
-        Teilnehmer[i].Hand.append(spieldeck.karteziehen())
-
-    for i in range(0, len(Teilnehmer)):
         print(Teilnehmer[i].Spielername + "s Hand:")
         Teilnehmer[i].printHand()
+
+
+    for i in range(1, len(Teilnehmer)):
+        Teilnehmer[i].handwert()
+        if Teilnehmer[i].Handwert == 21:
+            Teilnehmer[i].Spielerguthaben += 2 * Teilnehmer[i].Einsatz
+            print("Sie haben gewonnen! Ihr Guthaben beträgt" + str(Teilnehmer[i].Spielerguthaben))
+            continue
+
+        karte1 = Teilnehmer[i].Hand[0].returnkartenname()
+        karte2 = Teilnehmer[i].Hand[1].returnkartenname()
+
+        zeichen1 = karte1.split()
+        zeichen2 = karte2.split()
+
+        print(Teilnehmer[i].Spielername + " ist an der Reihe.")
+
+        if zeichen1[1] == zeichen2[1] and Teilnehmer[i].Spielerguthaben >= Teilnehmer[i].Einsatz:
+
+            while True:
+                wahl = ""
+                wahl = input("Wollen Sie splitten? (Y/N)")
+                if wahl == "Y" or wahl == "N"
+                    break
+                else:
+                    print("Ungültige Eingabe!")
+
+            if wahl == "Y" :
+
+
+
+
+
 
     #for i in range(1, len(Teilnehmer)):
 
