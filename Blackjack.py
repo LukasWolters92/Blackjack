@@ -144,6 +144,53 @@ class Spieler:
             return False
 
 
+def doubledown(Teilnehmer):
+
+    wahl = ""
+    if Teilnehmer.Handwert <= 11 and len(Teilnehmer.Hand) == 2:
+        while True:
+
+            try:
+                wahl = str(input("Double Down? (Y/N)"))
+                if wahl == "Y":
+                    Teilnehmer.Spielerguthaben -= Teilnehmer.Einsatz
+                    Teilnehmer.Einsatz = 2 * Teilnehmer.Einsatz
+                    Teilnehmer.Hand.append(spieldeck.karteziehen())
+                    Teilnehmer.printHand()
+                    raise Exception
+                elif wahl == "N":
+                    break
+                else:
+                    continue
+
+
+            except ValueError:
+                print("Ungültige Eingabe!")
+
+
+def doubledownsplit(Teilnehmer):
+
+    wahl = ""
+    if Teilnehmer.SplitHandwert <= 11 and len(Teilnehmer.SplitHand) == 2:
+        while True:
+
+            try:
+                wahl = str(input("Double Down? (Y/N)"))
+                if wahl == "Y":
+                    Teilnehmer.Spielerguthaben -= Teilnehmer.SplitEinsatz
+                    Teilnehmer.SplitEinsatz = 2 * Teilnehmer.SplitEinsatz
+                    Teilnehmer.SplitHand.append(spieldeck.karteziehen())
+                    Teilnehmer.printSplitHand()
+                    raise Exception
+                elif wahl == "N":
+                    break
+                else:
+                    continue
+
+
+            except ValueError:
+                print("Ungültige Eingabe!")
+
 
 
 
@@ -252,25 +299,19 @@ while spieldeck.anzahlkarten() > 52:
 
                         print("1.Hand")
 
+
+
                         while True:
+
                             Teilnehmer[i].handwert()
 
-                            wahl = ""
-                            #Double Down
-                            if Teilnehmer[i].Handwert <= 11 and len(Teilnehmer[i].Hand) == 2:
-                                try:
-                                    wahl = str(input("Double Down? (Y/N)"))
-                                    if wahl == "Y":
-                                        Teilnehmer[i].Spielerguthaben -= Teilnehmer[i].Einsatz
-                                        Teilnehmer[i].Einsatz = 2*Teilnehmer[i].Einsatz
-                                        Teilnehmer[i].Hand.append(spieldeck.karteziehen())
-                                        Teilnehmer[i].printHand()
-                                        break
-                                    else:
-                                        break
+                            try:
+                                doubledown(Teilnehmer[i])
+                            except Exception:
+                                break
+                            else:
+                                pass
 
-                                except ValueError:
-                                    print("Ungültige Eingabe!")
 
                             wahl = ""
                             try:
@@ -288,27 +329,17 @@ while spieldeck.anzahlkarten() > 52:
                         print("2.Hand")
 
                         while True:
-
                             Teilnehmer[i].splithandwert()
 
-                            wahl = ""
-                            # Double Down
-                            if Teilnehmer[i].SplitHandwert <= 11 and len(Teilnehmer[i].SplitHand) == 2:
-                                try:
-                                    wahl = str(input("Double Down? (Y/N)"))
-                                    if wahl == "Y":
-                                        Teilnehmer[i].Spielerguthaben -= Teilnehmer[i].SplitEinsatz
-                                        Teilnehmer[i].SplitEinsatz = 2 * Teilnehmer[i].SplitEinsatz
-                                        Teilnehmer[i].SplitHand.append(spieldeck.karteziehen())
-                                        Teilnehmer[i].printSplitHand()
-                                        break
-                                    else:
-                                        break
-
-                                except ValueError:
-                                    print("Ungültige Eingabe!")
+                            try:
+                                doubledownsplit(Teilnehmer[i])
+                            except Exception:
+                                break
+                            else:
+                                pass
 
                             wahl = ""
+
                             try:
                                 wahl = str(input("Hit? (Y/N)"))
                                 if wahl == "Y":
@@ -330,6 +361,7 @@ while spieldeck.anzahlkarten() > 52:
                 except ValueError:
                     print("Ungültige Eingabe")
 
+            break
 
         #else #Double down?
 
