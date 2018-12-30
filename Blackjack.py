@@ -147,7 +147,7 @@ class Spieler:
 def doubledown(Teilnehmer):
 
     wahl = ""
-    if Teilnehmer.Handwert <= 11 and len(Teilnehmer.Hand) == 2:
+    if Teilnehmer.Handwert <= 11 and len(Teilnehmer.Hand) == 2 and Teilnehmer.Spielerguthaben > Teilnehmer.Einsatz:
         while True:
 
             try:
@@ -171,7 +171,7 @@ def doubledown(Teilnehmer):
 def doubledownsplit(Teilnehmer):
 
     wahl = ""
-    if Teilnehmer.SplitHandwert <= 11 and len(Teilnehmer.SplitHand) == 2:
+    if Teilnehmer.SplitHandwert <= 11 and len(Teilnehmer.SplitHand) == 2 and Teilnehmer.Spielerguthaben > Teilnehmer.SplitEinsatz:
         while True:
 
             try:
@@ -217,7 +217,8 @@ while True:
 
 
 while spieldeck.anzahlkarten() > 52:
-    Teilnehmer
+
+
     for i in range(1, len(Teilnehmer)):
         a = 0                                                                                                           # a ist eine Hilfsvariable
         while True:
@@ -254,10 +255,10 @@ while spieldeck.anzahlkarten() > 52:
 
         #Test Split
 
-        Teilnehmer[i].leerehand()
-        Teilnehmer[i].Hand.append(Karte("♥ 2", 2))
-        Teilnehmer[i].Hand.append(Karte("♣ 2", 2))
-        Teilnehmer[i].printHand()
+        #Teilnehmer[i].leerehand()
+        #Teilnehmer[i].Hand.append(Karte("♥ 2", 2))
+        #Teilnehmer[i].Hand.append(Karte("♣ 2", 2))
+        #Teilnehmer[i].printHand()
 
         #TestEnde Split
 
@@ -305,6 +306,11 @@ while spieldeck.anzahlkarten() > 52:
 
                             Teilnehmer[i].handwert()
 
+                            if Teilnehmer[i].Handwert > 21:
+
+                                Teilnehmer[i].Handwert = 0
+                                break
+
                             try:
                                 doubledown(Teilnehmer[i])
                             except Exception:
@@ -330,6 +336,11 @@ while spieldeck.anzahlkarten() > 52:
 
                         while True:
                             Teilnehmer[i].splithandwert()
+
+                            if Teilnehmer[i].SplitHandwert > 21:
+
+                                Teilnehmer[i].SplitHandwert = 0
+                                break
 
                             try:
                                 doubledownsplit(Teilnehmer[i])
@@ -363,11 +374,153 @@ while spieldeck.anzahlkarten() > 52:
 
             break
 
-        #else #Double down?
+        else:
+            while True:
+
+                Teilnehmer[i].handwert()
+
+                if Teilnehmer[i].Handwert > 21:
+                    break
+
+                try:
+                    doubledown(Teilnehmer[i])
+                except Exception:
+                    break
+                else:
+                    pass
+
+                wahl = ""
+                try:
+                    wahl = str(input("Hit? (Y/N)"))
+                    if wahl == "Y":
+                        Teilnehmer[i].Hand.append(spieldeck.karteziehen())
+                        Teilnehmer[i].printHand()
+                        continue
+                    else:
+                        break
+
+                except ValueError:
+                    print("Ungültige Eingabe!")
+
+    Teilnehmer[0].handwert()
+
+    if Teilnehmer[0].Handwert < 17:
+        Teilnehmer[0].Hand.append(spieldeck.karteziehen())
+        print(Teilnehmer[0].Spielername + "s Hand:")
+        Teilnehmer[0].printHand()
+    else:
+        print(Teilnehmer[0].Spielername + "s Hand:")
+        Teilnehmer[0].printHand()
+
+    Teilnehmer[0].handwert()
+
+
+    for i in range(1, len(Teilnehmer)):
+
+        Teilnehmer[i].handwert()
+        Teilnehmer[i].splithandwert()
+
+        if Teilnehmer[0].Handwert == 21 and len(Teilnehmer[0].Hand) == 2:
+
+
+            if Teilnehmer[i].Handwert == 21 and len(Teilnehmer[i].Hand) == 2 and len(Teilnehmer[i].SplitHand) == 0:
+
+                print("Unentschieden! " + Teilnehmer[i].Spielername + " und Dealer haben Blackjack")
+
+                Teilnehmer[i].Spielerguthaben = Teilnehmer[i].Spielerguthaben + Teilnehmer[i].Einsatz
+
+            else:
+
+                print(Teilnehmer[i].Spielername + " hat verloren")
+
+        elif Teilnehmer[i].Handwert == 21 and len(Teilnehmer[i].Hand) == 2 and len(Teilnehmer[i].SplitHand) == 0:
+
+            print(Teilnehmer[i].Spielername + " hat mit Blackjack gewonnen")
+
+            Teilnehmer[i].Spielerguthaben = Teilnehmer[i].Spielerguthaben + 3 * Teilnehmer[i].Einsatz
+
+        elif Teilnehmer[0].Handwert > 21:
+
+            if Teilnehmer[i].Handwert > 21:
+
+                print(Teilnehmer[i].Spielername + "s 1.Hand hat verloren")
+
+            else:
+
+                print("Dealer ist Bust! " + Teilnehmer[i].Spielername + "s 1.Hand hat gewonnen")
+
+                Teilnehmer[i].Spielerguthaben = Teilnehmer[i].Spielerguthaben + 2 * Teilnehmer[i].Einsatz
+
+            if Teilnehmer[i].SplitHandwert > 21 and len(Teilnehmer[i].SplitHand) > 0:
+
+                print(Teilnehmer[i].Spielername + "s 2.Hand hat verloren")
+
+            elif len(Teilnehmer[i].SplitHand) > 0:
+
+                print("Dealer ist Bust! " + Teilnehmer[i].Spielername + "s 2.Hand hat gewonnen")
+
+                Teilnehmer[i].Spielerguthaben = Teilnehmer[i].Spielerguthaben + 2 * Teilnehmer[i].SplitEinsatz
+            else:
+                pass
+
+        elif Teilnehmer[0].Handwert <= 21:
+
+            if Teilnehmer[i].Handwert > Teilnehmer[0].Handwert:
+                print(Teilnehmer[i].Spielername + "s 1.Hand hat gewonnen")
+
+                Teilnehmer[i].Spielerguthaben = Teilnehmer[i].Spielerguthaben + 2 * Teilnehmer[i].Einsatz
+
+            elif Teilnehmer[i].Handwert == Teilnehmer[0].Handwert:
+                print(Teilnehmer[i].Spielername + "s 1.Hand ist unentschieden")
+
+                Teilnehmer[i].Spielerguthaben = Teilnehmer[i].Spielerguthaben + 1 * Teilnehmer[i].Einsatz
+
+            elif Teilnehmer[i].Handwert < Teilnehmer[0].Handwert:
+                print(Teilnehmer[i].Spielername + "s 1.Hand hat verloren")
+
+            else:
+                pass
+
+            if Teilnehmer[i].SplitHandwert > Teilnehmer[0].Handwert and len(Teilnehmer[i].SplitHand) > 0:
+                print(Teilnehmer[i].Spielername + "s 2.Hand hat gewonnen")
+
+                Teilnehmer[i].Spielerguthaben = Teilnehmer[i].Spielerguthaben + 2 * Teilnehmer[i].SplitEinsatz
+
+            elif Teilnehmer[i].SplitHandwert == Teilnehmer[0].Handwert and len(Teilnehmer[i].SplitHand) > 0:
+                print(Teilnehmer[i].Spielername + "s 2.Hand ist unentschieden")
+
+                Teilnehmer[i].Spielerguthaben = Teilnehmer[i].Spielerguthaben + 1 * Teilnehmer[i].SplitEinsatz
+
+            elif Teilnehmer[i].SplitHandwert < Teilnehmer[0].Handwert and len(Teilnehmer[i].SplitHand) > 0:
+                print(Teilnehmer[i].Spielername + "s 2.Hand hat verloren")
+
+            else:
+                pass
+
+        else:
+            print("etwas ist flasch gelaufen")
+
+
+        print(Teilnehmer[i].Spielerguthaben)
+    print("Runde vorbei!")
 
 
 
-    #for i in range(1, len(Teilnehmer)):
+
+
+
+
+
+
+
+        #Testen ob der Spieler gewonnen hat durch Blackjack usw
+        # Geld verteilen
+
+    ##### GIT hochladen #####
+
+
+
+
 
 
 
