@@ -134,11 +134,11 @@ class Spieler:
         for i in range(0,len(self.SplitHand)):
             print(self.SplitHand[i].returnkartenname())
 
-    def wetten(self, Wette):
+    def wetten(self, wette):
 
-        if self.Spielerguthaben >= Wette:
-            self.Spielerguthaben -= Wette
-            self.Einsatz = Wette
+        if self.Spielerguthaben >= wette:
+            self.Spielerguthaben -= wette
+            self.Einsatz = wette
             return True
         else:
             return False
@@ -222,6 +222,8 @@ while spieldeck.anzahlkarten() > 52:
     for i in range(1, len(Teilnehmer)):
         a = 0                                                                                                           # a ist eine Hilfsvariable
         while True:
+
+            ### Test Codeänderung
             try:
                 a = int(input(Teilnehmer[i].Spielername + ", Was ist Ihr Einsatz? Ihr Guthaben beträgt " + str(Teilnehmer[i].Spielerguthaben) + " "))
                 b = False
@@ -308,7 +310,6 @@ while spieldeck.anzahlkarten() > 52:
 
                             if Teilnehmer[i].Handwert > 21:
 
-                                Teilnehmer[i].Handwert = 0
                                 break
 
                             try:
@@ -339,7 +340,6 @@ while spieldeck.anzahlkarten() > 52:
 
                             if Teilnehmer[i].SplitHandwert > 21:
 
-                                Teilnehmer[i].SplitHandwert = 0
                                 break
 
                             try:
@@ -380,6 +380,7 @@ while spieldeck.anzahlkarten() > 52:
                 Teilnehmer[i].handwert()
 
                 if Teilnehmer[i].Handwert > 21:
+
                     break
 
                 try:
@@ -419,6 +420,17 @@ while spieldeck.anzahlkarten() > 52:
 
         Teilnehmer[i].handwert()
         Teilnehmer[i].splithandwert()
+
+        if Teilnehmer[i].Handwert > 21:
+            Teilnehmer[i].Handwert = 0
+
+        else:
+            pass
+
+        if Teilnehmer[i].SplitHandwert > 21:
+            Teilnehmer[i].SplitHandwert = 0
+        else:
+            pass
 
         if Teilnehmer[0].Handwert == 21 and len(Teilnehmer[0].Hand) == 2:
 
@@ -499,6 +511,8 @@ while spieldeck.anzahlkarten() > 52:
 
         else:
             print("etwas ist flasch gelaufen")
+
+        print(Teilnehmer[i].Einsatz)
 
 
         print(Teilnehmer[i].Spielerguthaben)
