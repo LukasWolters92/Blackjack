@@ -92,46 +92,49 @@ class Spieler:
         self.SplitEinsatz = 0
 
     def handwert(self):
-        a = 0
-        b = 0
+        handwert_1 = 0
+        handwert_2 = 0
 
-        for i in range(0,len(self.Hand)):
-            if self.Hand[i].returnkartenname() != "♥ Ass" or  "♣ Ass" or "♦ Ass" or "♠ Ass":
-                a += self.Hand[i].returnkartenwert()
-                b += self.Hand[i].returnkartenwert()
+        for i in range(0, len(self.Hand)):
+
+            if self.Hand[i].returnkartenwert() != -1:
+                handwert_1 += self.Hand[i].returnkartenwert()
+                handwert_2 += self.Hand[i].returnkartenwert()
             else:
-                a += 11
-                b += 1
+                handwert_1 += 11
+                handwert_2 += 1
 
-        if a <= 21:
-            self.Handwert = a
+        if handwert_1 <= 21:
+            self.Handwert = handwert_1
         else:
-            self.Handwert = b
+            self.Handwert = handwert_2
 
 
     def splithandwert(self):
-        a = 0
-        b = 0
+        splithandwert_1 = 0
+        splithandwert_2 = 0
 
-        for i in range(0,len(self.SplitHand)):
-            if self.SplitHand[i].returnkartenname() != "♥ Ass" or  "♣ Ass" or "♦ Ass" or "♠ Ass":
-                a += self.SplitHand[i].returnkartenwert()
-                b += self.SplitHand[i].returnkartenwert()
+        for i in range(0, len(self.SplitHand)):
+            if self.SplitHand[i].returnkartenname() != "♥ Ass" or self.SplitHand[i].returnkartenname() != "♣ Ass" or self.SplitHand[i].returnkartenname() != "♦ Ass" or self.SplitHand[i].returnkartenname() != "♠ Ass":
+                splithandwert_1 += self.SplitHand[i].returnkartenwert()
+                splithandwert_2 += self.SplitHand[i].returnkartenwert()
             else:
-                a += 11
-                b += 1
+                splithandwert_1 += 11
+                splithandwert_2 += 1
 
-        if a <= 21:
-            self.SplitHandwert = a
+        if splithandwert_1 <= 21:
+            self.SplitHandwert = splithandwert_1
         else:
-            self.SplitHandwert = b
+            self.SplitHandwert = splithandwert_2
 
     def printHand(self):
-        for i in range(0,len(self.Hand)):
+        for i in range(0, len(self.Hand)):
             print(self.Hand[i].returnkartenname())
+        self.handwert()
+        print(self.Handwert)
 
     def printSplitHand(self):
-        for i in range(0,len(self.SplitHand)):
+        for i in range(0, len(self.SplitHand)):
             print(self.SplitHand[i].returnkartenname())
 
     def wetten(self, wette):
@@ -218,6 +221,9 @@ while True:
 
 while spieldeck.anzahlkarten() > 52:
 
+    for i in range(0, len(Teilnehmer)):
+        Teilnehmer[i].leerehand()
+
 
     for i in range(1, len(Teilnehmer)):
         a = 0                                                                                                           # a ist eine Hilfsvariable
@@ -229,6 +235,7 @@ while spieldeck.anzahlkarten() > 52:
                 b = False
                 b = Teilnehmer[i].wetten(a)
                 if b:
+                    print(Teilnehmer[i].Einsatz)
                     break
                 else:
                     print("Sie haben nicht genug Guthaben.")
@@ -238,7 +245,7 @@ while spieldeck.anzahlkarten() > 52:
     print("Die ersten Karten werden gezogen")
 
     for i in range(0, len(Teilnehmer)):
-        Teilnehmer[i].leerehand()
+
         Teilnehmer[i].Hand.append(spieldeck.karteziehen())
 
     print(Teilnehmer[0].Spielername + "s Hand:")
