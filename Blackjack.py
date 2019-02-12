@@ -530,15 +530,3 @@ while spieldeck.anzahlkarten() > 52:
 
 
 
-
-
-
-
-        #Testen ob der Spieler gewonnen hat durch Blackjack usw
-        # Geld verteilen
-
-    ##### GIT hochladen #####
-
-
-
-
